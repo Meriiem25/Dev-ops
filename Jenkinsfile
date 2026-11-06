@@ -1,9 +1,19 @@
+
 pipeline {
     agent any
-    parameters{
-       string(name:'VERSION',defaultValue:'',description:'version to deploy on prod')
-       choice(name:'VERSION',choices:['1.1.0','1.2.0','1.3.0'],description:'')
-       booleanParam(name:'executeTests',defaultValue:true,description:'')
+
+    parameters {
+        choice(
+            name: 'VERSION',
+            choices: ['1.1.0', '1.2.0', '1.3.0'],
+            description: 'Select the version to deploy'
+        )
+
+        booleanParam(
+            name: 'executeTests',
+            defaultValue: true,
+            description: 'Execute tests before deployment'
+        )
     }
 
     stages {
@@ -14,8 +24,8 @@ pipeline {
         }
 
         stage('Test') {
-            when{
-                expression{
+            when {
+                expression {
                     params.executeTests
                 }
             }
@@ -27,8 +37,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying Python application...'
-                echo"deploying version $ {params.{VERSION}"
+                echo "Deploying version ${params.VERSION}"
             }
         }
     }
 }
+
