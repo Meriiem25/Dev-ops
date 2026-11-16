@@ -1,13 +1,19 @@
-const fs = require('node:fs');
-const path = require('node:path');
 
-const outputDir = path.join(__dirname, '..', 'dist');
+const fs = require('fs');
+const path = require('path');
 
-fs.mkdirSync(outputDir, { recursive: true });
+// Source HTML
+const source = path.join(__dirname, '..', 'index.html');
 
-fs.copyFileSync(
-    path.join(__dirname, '..', 'index.html'),
-    path.join(outputDir, 'index.html')
-);
+// Destination HTML
+const distDir = path.join(__dirname, '..', 'dist');
+const destination = path.join(distDir, 'index.html');
+
+// Create dist directory if it does not exist
+fs.mkdirSync(distDir, { recursive: true });
+
+// Read source and write its content to destination
+const content = fs.readFileSync(source);
+fs.writeFileSync(destination, content);
 
 console.log('Build completed successfully!');
