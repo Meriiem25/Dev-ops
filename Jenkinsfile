@@ -48,7 +48,7 @@ pipeline {
                 withCredentials([
                     string(
                         credentialsId: 'db9d1111-6523-46f8-9196-9bb976f12fd0',
-                        variable: 'NETLIFY_AUTH_TOKEN'
+                        variable: 'db9d1111-6523-46f8-9196-9bb976f12fd0'
                     )
                 ]) {
                     bat 'docker run --rm -v "%CD%:/app" -w /app -e NETLIFY_AUTH_TOKEN -e NETLIFY_SITE_ID node:18-alpine sh -c "npx --yes netlify-cli deploy --prod --dir=dist --site $NETLIFY_SITE_ID"'
