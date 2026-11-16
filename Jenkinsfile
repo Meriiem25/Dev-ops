@@ -46,6 +46,11 @@ pipeline {
                 bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
             }
         }
+        stage('Unit Tests') {
+    steps {
+        bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
+    }
+}
     }
 }
 
