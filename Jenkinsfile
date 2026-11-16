@@ -26,7 +26,7 @@ pipeline {
         stage('Check Permissions') {
             steps {
                 echo 'Checking Docker permissions...'
-                bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine sh -c "id; ls -ld /app; mkdir -p /app/dist; ls -ld /app/dist; touch /app/dist/test-write.txt; ls -l /app/dist"'
+                bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine sh -c "id; mkdir -p /app/dist; ls -ld /app /app/dist; touch /app/dist/test-write.txt; ls -l /app/dist"'
             }
         }
 
@@ -45,6 +45,7 @@ pipeline {
         }
     }
 }
+
 
 
 
