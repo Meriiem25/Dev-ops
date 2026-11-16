@@ -5,53 +5,27 @@ pipeline {
     stages {
 
         stage('Install Dependencies') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
             steps {
-                sh '''
-                    echo "Installing dependencies..."
-                    node --version
-                    npm --version
-                    npm ci
-                '''
+                echo 'Installing dependencies...'
+                bat 'docker run --rm -v "%CD%:/app" -w /app node:18-alpine npm ci'
             }
         }
 
         stage('Build') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
             steps {
-                sh '''
-                    echo "Building application..."
-                    npm run build
-                    ls -la
-                '''
+                echo 'Building application...'
+                bat 'docker run --rm -v "%CD%:/app" -w /app node:18-alpine npm run build'
             }
         }
 
         stage('Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
             steps {
-                sh '''
-                    echo "Running tests..."
-                    npm test
-                '''
+                echo 'Running tests...'
+                bat 'docker run --rm -v "%CD%:/app" -w /app node:18-alpine npm test'
             }
         }
     }
 }
+
 
 
