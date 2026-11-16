@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
@@ -12,7 +13,7 @@ pipeline {
 
         stage('Check Permissions') {
             steps {
-                echo 'Checking Docker workspace permissions...'
+                echo 'Checking Docker permissions...'
                 bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine sh -c "id; ls -ld /app /app/dist; ls -l /app/dist; touch /app/dist/test-write.txt"'
             }
         }
@@ -24,14 +25,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Tests') {
             steps {
-                echo 'Running tests...'
+                echo 'Running application tests...'
                 bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
             }
         }
     }
 }
+
 
 
 
