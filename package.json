@@ -1,3 +1,4 @@
+
 {
   "name": "dev-ops-ci-demo",
   "version": "1.0.0",
@@ -6,8 +7,4 @@
     "build": "node scripts/build.js",
     "test": "node --test"
   }
-}
-"scripts": {
-  "build": "node scripts/build.js",
-  "test": "node --test"
 }
