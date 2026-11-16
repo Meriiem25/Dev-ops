@@ -23,6 +23,14 @@ pipeline {
                 bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
             }
         }
+        
+stage('Check Permissions') {
+    steps {
+        echo 'Checking Docker workspace permissions...'
+        bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine sh -c "id; ls -ld /app /app/dist; ls -l /app/dist; touch /app/dist/test-write.txt"'
+    }
+}
+
     }
 }
 
