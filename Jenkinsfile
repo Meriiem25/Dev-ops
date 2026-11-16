@@ -47,7 +47,7 @@ pipeline {
 
                 withCredentials([
                     string(
-                        credentialsId: 'netlify-auth-token',
+                        credentialsId: 'db9d1111-6523-46f8-9196-9bb976f12fd0',
                         variable: 'NETLIFY_AUTH_TOKEN'
                     )
                 ]) {
