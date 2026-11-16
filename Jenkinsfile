@@ -1,8 +1,9 @@
 
 pipeline {
     agent any
-    environment{
-        NETLIFY_SITE_ID='db9d1111-6523-46f8-9196-9bb976f12fd0'
+
+    environment {
+        NETLIFY_SITE_ID = 'db9d1111-6523-46f8-9196-9bb976f12fd0'
     }
 
     stages {
@@ -26,13 +27,6 @@ pipeline {
             }
         }
 
-        stage('Check Permissions') {
-            steps {
-                echo 'Checking Docker permissions...'
-                bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine sh -c "id; mkdir -p /app/dist; ls -ld /app /app/dist; touch /app/dist/test-write.txt; ls -l /app/dist"'
-            }
-        }
-
         stage('Build') {
             steps {
                 echo 'Building application...'
@@ -40,19 +34,39 @@ pipeline {
             }
         }
 
-        stage('Tests') {
+        stage('Unit Tests') {
             steps {
-                echo 'Running application tests...'
+                echo 'Running unit tests...'
                 bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
             }
         }
-        stage('Unit Tests') {
-    steps {
-        bat 'docker run --rm --user root -v "%CD%:/app" -w /app node:18-alpine npm test'
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application to Netlify...'
+
+                withCredentials([
+                    string(
+                        credentialsId: 'netlify-auth-token',
+                        variable: 'NETLIFY_AUTH_TOKEN'
+                    )
+                ]) {
+                    bat 'docker run --rm -v "%CD%:/app" -w /app -e NETLIFY_AUTH_TOKEN -e NETLIFY_SITE_ID node:18-alpine sh -c "npx --yes netlify-cli deploy --prod --dir=dist --site $NETLIFY_SITE_ID"'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the Console Output.'
+        }
     }
 }
-    }
-}
+
 
 
 
